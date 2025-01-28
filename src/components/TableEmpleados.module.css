@@ -1,0 +1,39 @@
+.table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 2vh;
+    margin: 0 auto;
+    padding: 15px;
+    border-radius: 18px;
+}
+
+.table th,
+.table td {
+    text-align: center;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    text-align: center;
+    background-color: #f44336;
+    color: #fff;
+}
+
+.table tr:nth-child(even) {
+    background-color: #4b4242;
+}
+
+.table tr:hover {
+    background-color: #383333;
+}
+
+.actionButton {
+    font-size: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    margin: 0 5px;
+}

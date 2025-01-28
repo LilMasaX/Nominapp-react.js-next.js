@@ -1,0 +1,58 @@
+
+
+
+
+.container {
+  position: relative;
+  padding: 2rem;
+}
+
+.addButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #f44336;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #0f0f0f;
+}
+
+.modalContent {
+  background-color: #2d2d2d;
+  margin: 10% auto; /* Centrar verticalmente */
+  padding: 20px;
+  width: 50%;
+  max-width: 600px;
+  border-radius: 8px;
+  position: relative; /* Para ubicar la X (close) */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
