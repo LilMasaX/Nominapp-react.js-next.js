@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import ModalWorkers from '@/components/ModalWorkers';
-import TableEmpleados from '@/components/TableEmpleados';
+import ModalWorkers from '@/components/modalWorkers/ModalWorkers';
+import TableEmpleados from '@/components/tableEmpleados/TableEmpleados';
 
 export default function Empleados() {
   const [trabajadores, setTrabajadores] = useState([]);
@@ -21,7 +21,7 @@ export default function Empleados() {
     <>
       <h1>Empleados</h1>
       <ModalWorkers onAddTrabajador={fetchTrabajadores} />
-      <TableEmpleados trabajadores={trabajadores} />
+      <TableEmpleados trabajadores={trabajadores} onUpdate={fetchTrabajadores} />
     </>
   );
 }
