@@ -11,9 +11,26 @@ db.prepare(`
     cargo TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     documento TEXT NOT NULL,
-    telefono TEXT NOT NULL
+    telefono TEXT NOT NULL,
+    numero_cuenta TEXT,
+    tipo_cuenta TEXT CHECK(tipo_cuenta IN ('ahorros', 'corriente')),
+    banco TEXT
   )
 `).run();
+
+// Verificar si las columnas existen antes de intentar agregarlas
+const columns = db.prepare("PRAGMA table_info(trabajadores)").all();
+const columnNames = columns.map(column => column.name);
+
+if (!columnNames.includes('numero_cuenta')) {
+  db.prepare(`ALTER TABLE trabajadores ADD COLUMN numero_cuenta TEXT`).run();
+}
+if (!columnNames.includes('tipo_cuenta')) {
+  db.prepare(`ALTER TABLE trabajadores ADD COLUMN tipo_cuenta TEXT CHECK(tipo_cuenta IN ('ahorros', 'corriente'))`).run();
+}
+if (!columnNames.includes('banco')) {
+  db.prepare(`ALTER TABLE trabajadores ADD COLUMN banco TEXT`).run();
+}
 
 // Crear tabla de deducciones con `trabajadores_id` como clave foránea
 db.prepare(`

@@ -44,6 +44,39 @@
   position: relative; /* Para ubicar la X (close) */
 }
 
+.formDiv {
+  margin-bottom: 1.2rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ddd;
+  font-size: 0.95rem;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  background: #1f1e1e;
+  border: 1px solid #444;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+}
+
+
+.btnAdd {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
 .close {
   color: #aaa;
   float: right;

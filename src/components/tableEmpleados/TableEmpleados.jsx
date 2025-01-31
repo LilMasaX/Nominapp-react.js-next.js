@@ -40,7 +40,9 @@ export default function TableEmpleados({ trabajadores, onUpdate }) {
                         <th>Email</th>
                         <th>Documento</th>
                         <th>Teléfono</th>
-                        <th>Cargo</th>
+                        <th>Banco</th>
+                        <th>Tipo de cuenta</th>
+                        <th>Numero de Cuenta</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -51,7 +53,9 @@ export default function TableEmpleados({ trabajadores, onUpdate }) {
                             <td>{trabajador.email}</td>
                             <td>{trabajador.documento}</td>
                             <td>{trabajador.telefono}</td>
-                            <td>{trabajador.cargo}</td>
+                            <td>{trabajador.banco}</td>
+                            <td>{trabajador.tipo_cuenta}</td>
+                            <td>{trabajador.numero_cuenta}</td>
                             <td>
                                 <button className={styles.actionButton} onClick={() => openEditModal(trabajador.id)}><UserPen /></button>
                                 <button className={styles.actionButton} onClick={() => openModal(trabajador.id, 'devengados')}><CirclePlus /></button>

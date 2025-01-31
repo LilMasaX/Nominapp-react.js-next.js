@@ -37,21 +37,11 @@ export async function GET(request, { params }) {
 }
 
 // PUT - Actualizar trabajador
-export async function PUT(request, { params }) {
+export async function PUT(request) {
   try {
-    const { id } = params;
-    const { nombre, email, documento, telefono, cargo } = await request.json();
-
-    // Validaciones
-    if (!id || isNaN(id)) {
-      return new Response(JSON.stringify({ error: 'ID inválido' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    if (!nombre || !email) {
-      return new Response(JSON.stringify({ error: 'Nombre y email son requeridos' }), {
+    const { id, nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco } = await request.json();
+    if (!nombre || !email || !documento || !telefono || !cargo || !numero_cuenta || !tipo_cuenta || !banco) {
+      return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
@@ -59,11 +49,11 @@ export async function PUT(request, { params }) {
 
     const stmt = db.prepare(`
       UPDATE trabajadores 
-      SET nombre = ?, email = ?, documento = ?, telefono = ?, cargo = ? 
+      SET nombre = ?, email = ?, documento = ?, telefono = ?, cargo = ?, numero_cuenta = ?, tipo_cuenta = ?, banco = ?
       WHERE id = ?
     `);
 
-    const info = stmt.run(nombre, email, documento, telefono, cargo, id);
+    const info = stmt.run(nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, id);
 
     if (info.changes > 0) {
       return new Response(null, { status: 204 });

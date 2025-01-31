@@ -7,7 +7,10 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
         email: '',
         documento: '',
         telefono: '',
-        cargo: ''
+        cargo: '',
+        numero_cuenta: '',
+        tipo_cuenta: '',
+        banco: ''
     });
 
     useEffect(() => {
@@ -19,7 +22,16 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
                     }
                     return response.json();
                 })
-                .then(data => setFormData(data))
+                .then(data => setFormData({
+                    nombre: data.nombre || '',
+                    email: data.email || '',
+                    documento: data.documento || '',
+                    telefono: data.telefono || '',
+                    cargo: data.cargo || '',
+                    numero_cuenta: data.numero_cuenta || '',
+                    tipo_cuenta: data.tipo_cuenta || '',
+                    banco: data.banco || ''
+                }))
                 .catch(error => console.error('Error fetching trabajador:', error));
         }
     }, [isOpen, trabajadorId]);
@@ -36,7 +48,7 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ id: trabajadorId, ...formData }),
         });
         if (response.ok) {
             onUpdate();
@@ -47,14 +59,23 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
     };
 
     const handleDelete = async () => {
-        const response = await fetch(`/api/trabajadores/${trabajadorId}`, {
-            method: 'DELETE',
-        });
-        if (response.ok) {
-            onClose();
-            onUpdate();
-        } else {
-            console.error('Error deleting trabajador');
+        try {
+            const response = await fetch(`/api/trabajadores/${trabajadorId}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                onClose();
+                onUpdate();
+            } else {
+                const errorData = await response.json();
+                if (errorData.error && errorData.error.includes('FOREIGN KEY constraint failed')) {
+                    alert('No se puede eliminar el trabajador porque tiene devengados o deducciones asociados. Elimine primero los devengados y deducciones.');
+                } else {
+                    console.error('Error deleting trabajador');
+                }
+            }
+        } catch (error) {
+            console.error('Error deleting trabajador:', error);
         }
     };
 
@@ -85,6 +106,22 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
                     <div className={styles.formDiv}>
                         <label className={styles.label} htmlFor="cargo">Cargo:</label>
                         <input className={styles.inputField} type="text" id="cargo" name="cargo" value={formData.cargo} onChange={handleChange} required />
+                    </div>
+                    <div className={styles.formDiv}>
+                        <label className={styles.label} htmlFor="numero_cuenta">Numero de Cuenta:</label>
+                        <input className={styles.inputField} type="text" id="numero_cuenta" name="numero_cuenta" value={formData.numero_cuenta} onChange={handleChange} required />
+                    </div>
+                    <div className={styles.formDiv}>
+                        <label className={styles.label} htmlFor="tipo_cuenta">Tipo de Cuenta:</label>
+                        <select className={styles.inputField} id="tipo_cuenta" name="tipo_cuenta" value={formData.tipo_cuenta} onChange={handleChange} required>
+                            <option value="">Seleccione</option>
+                            <option value="ahorros">Ahorros</option>
+                            <option value="corriente">Corriente</option>
+                        </select>
+                    </div>
+                    <div className={styles.formDiv}>
+                        <label className={styles.label} htmlFor="banco">Banco:</label>
+                        <input className={styles.inputField} type="text" id="banco" name="banco" value={formData.banco} onChange={handleChange} required />
                     </div>
                     <button className={styles.btnAdd} type="submit">Actualizar</button>
                 </form>
