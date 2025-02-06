@@ -13,6 +13,7 @@ export default function ModalWorkers({ onAddTrabajador }) {
         numero_cuenta: '',
         tipo_cuenta: '',
         banco: '',
+        salario: ''
     });
 
     const openModal = () => setModalOpen(true);
@@ -88,6 +89,10 @@ export default function ModalWorkers({ onAddTrabajador }) {
                             <div className={styles.formDiv}>
                                 <label className={styles.label} htmlFor="banco">Banco:</label>
                                 <input className={styles.inputField} type="text" id="banco" name="banco" value={formData.banco} onChange={handleChange} required />
+                            </div>
+                            <div className={styles.formDiv}>
+                                <label className={styles.label} htmlFor="salario">Salario basico:</label>
+                                <input className={styles.inputField} type="number" id="salario" name="salario" value={formData.salario} onChange={handleChange} required />
                             </div>
                             <button className={styles.btnAdd} type="submit">Agregar</button>
                         </form>

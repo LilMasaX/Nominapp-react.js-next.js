@@ -14,7 +14,8 @@ db.prepare(`
     telefono TEXT NOT NULL,
     numero_cuenta TEXT,
     tipo_cuenta TEXT CHECK(tipo_cuenta IN ('ahorros', 'corriente')),
-    banco TEXT
+    banco TEXT,
+    salario REAL NOT NULL
   )
 `).run();
 
@@ -32,6 +33,10 @@ if (!columnNames.includes('banco')) {
   db.prepare(`ALTER TABLE trabajadores ADD COLUMN banco TEXT`).run();
 }
 
+if (!columnNames.includes('salario')) {
+  db.prepare(`ALTER TABLE trabajadores ADD COLUMN salario REAL `).run();
+}
+  
 // Crear tabla de deducciones con `trabajadores_id` como clave foránea
 db.prepare(`
   CREATE TABLE IF NOT EXISTS deducciones (

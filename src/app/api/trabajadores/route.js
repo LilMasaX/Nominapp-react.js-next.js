@@ -7,10 +7,10 @@ export async function GET(request) {
 
 export async function POST(request) {
   const { nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco } = await request.json();
-  if (!nombre || !email || !documento || !telefono || !cargo || !numero_cuenta || !tipo_cuenta || !banco) {
+  if (!nombre || !email || !documento || !telefono || !cargo || !numero_cuenta || !tipo_cuenta || !banco || salario) {
     return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), { status: 400 });
   }
-  const stmt = db.prepare('INSERT INTO trabajadores (nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+  const stmt = db.prepare('INSERT INTO trabajadores (nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
   const info = stmt.run(nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco);
   return new Response(JSON.stringify({ id: info.lastInsertRowid }), { status: 201 });
 }

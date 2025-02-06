@@ -11,6 +11,10 @@ export default function TableEmpleados({ trabajadores, onUpdate }) {
     const [modalType, setModalType] = useState(null);
     const [editModalOpen, setEditModalOpen] = useState(false);
 
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(value);
+    }
+
     const openModal = (trabajadorId, type) => {
         setSelectedTrabajador(trabajadorId);
         setModalType(type);
@@ -39,7 +43,7 @@ export default function TableEmpleados({ trabajadores, onUpdate }) {
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Documento</th>
-                        <th>Teléfono</th>
+                        <th>Salario Basico</th>
                         <th>Banco</th>
                         <th>Tipo de cuenta</th>
                         <th>Numero de Cuenta</th>
@@ -52,7 +56,7 @@ export default function TableEmpleados({ trabajadores, onUpdate }) {
                             <td>{trabajador.nombre}</td>
                             <td>{trabajador.email}</td>
                             <td>{trabajador.documento}</td>
-                            <td>{trabajador.telefono}</td>
+                            <td>{formatCurrency(trabajador.salario)}</td>
                             <td>{trabajador.banco}</td>
                             <td>{trabajador.tipo_cuenta}</td>
                             <td>{trabajador.numero_cuenta}</td>

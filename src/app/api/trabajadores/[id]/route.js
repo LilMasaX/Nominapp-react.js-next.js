@@ -36,11 +36,20 @@ export async function GET(request, { params }) {
   }
 }
 
-// PUT - Actualizar trabajador
-export async function PUT(request) {
+// PUT - Actualizar trabajador por ID
+export async function PUT(request, { params }) {
   try {
-    const { id, nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco } = await request.json();
-    if (!nombre || !email || !documento || !telefono || !cargo || !numero_cuenta || !tipo_cuenta || !banco) {
+    const { id } = params;
+    const { nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario } = await request.json();
+    
+    if (!id || isNaN(id)) {
+      return new Response(JSON.stringify({ error: 'ID inválido' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (!nombre || !email || !documento || !telefono || !cargo || !numero_cuenta || !tipo_cuenta || !banco || !salario) {
       return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -49,11 +58,11 @@ export async function PUT(request) {
 
     const stmt = db.prepare(`
       UPDATE trabajadores 
-      SET nombre = ?, email = ?, documento = ?, telefono = ?, cargo = ?, numero_cuenta = ?, tipo_cuenta = ?, banco = ?
+      SET nombre = ?, email = ?, documento = ?, telefono = ?, cargo = ?, numero_cuenta = ?, tipo_cuenta = ?, banco = ?, salario = ?
       WHERE id = ?
     `);
 
-    const info = stmt.run(nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, id);
+    const info = stmt.run(nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario, id);
 
     if (info.changes > 0) {
       return new Response(null, { status: 204 });
@@ -73,7 +82,7 @@ export async function PUT(request) {
   }
 }
 
-// DELETE - Eliminar trabajador
+// DELETE - Eliminar trabajador por ID
 export async function DELETE(request, { params }) {
   try {
     const { id } = params;

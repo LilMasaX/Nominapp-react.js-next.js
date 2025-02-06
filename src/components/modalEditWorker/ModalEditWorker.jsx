@@ -10,7 +10,8 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
         cargo: '',
         numero_cuenta: '',
         tipo_cuenta: '',
-        banco: ''
+        banco: '',
+        salario:''
     });
 
     useEffect(() => {
@@ -30,7 +31,8 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
                     cargo: data.cargo || '',
                     numero_cuenta: data.numero_cuenta || '',
                     tipo_cuenta: data.tipo_cuenta || '',
-                    banco: data.banco || ''
+                    banco: data.banco || '',
+                    salario: data.salario || ''
                 }))
                 .catch(error => console.error('Error fetching trabajador:', error));
         }
@@ -122,6 +124,10 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
                     <div className={styles.formDiv}>
                         <label className={styles.label} htmlFor="banco">Banco:</label>
                         <input className={styles.inputField} type="text" id="banco" name="banco" value={formData.banco} onChange={handleChange} required />
+                    </div>
+                    <div className={styles.formDiv}>
+                        <label className={styles.label} htmlFor="salario">Salario Básico:</label>
+                        <input className={styles.inputField} type="text" id="salario" name="salario" value={formData.salario} onChange={handleChange} required />
                     </div>
                     <button className={styles.btnAdd} type="submit">Actualizar</button>
                 </form>
