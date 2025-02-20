@@ -142,7 +142,7 @@ export default function FormDesprendibles() {
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.download = `desprendible_${trabajador.nombre}.xlsx`;
+      link.download = `desprendible_${trabajador.nombre}.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();

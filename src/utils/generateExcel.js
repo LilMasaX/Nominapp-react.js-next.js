@@ -1,6 +1,7 @@
 import ExcelJS from 'exceljs';
 import path from 'path';
 import fs from 'fs';
+import { convertExcelToPdf } from './convertExcelToPdf';
 
 export async function generateExcel(trabajador, fechaInicio, fechaFin, devengados = [], deducciones = [], valorAPagar, dbDevengados = [], dbDeducciones = []) {
     const workbook = new ExcelJS.Workbook();
@@ -71,7 +72,10 @@ export async function generateExcel(trabajador, fechaInicio, fechaFin, devengado
     worksheet.getCell('D18').value = formatCurrency(valorAPagar);
 
     // Generar el archivo Excel en memoria
-    const buffer = await workbook.xlsx.writeBuffer();
+    const excelBuffer = await workbook.xlsx.writeBuffer();
 
-    return buffer;
+    // Convertir el archivo Excel a PDF usando la API de iLovePDF
+    const pdfBuffer = await convertExcelToPdf(excelBuffer);
+
+    return pdfBuffer;
 }
