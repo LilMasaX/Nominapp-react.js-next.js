@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import path from 'path';
 import fs from 'fs';
-import { convertExcelToPdf } from './convertExcelToPdf';
+import { convertExcelToPdf } from '../app/actions/convertExcelToPdf';
 
 export async function generateExcel(trabajador, fechaInicio, fechaFin, devengados = [], deducciones = [], valorAPagar, dbDevengados = [], dbDeducciones = []) {
     const workbook = new ExcelJS.Workbook();
@@ -15,6 +15,13 @@ export async function generateExcel(trabajador, fechaInicio, fechaFin, devengado
     const worksheet = workbook.getWorksheet("desprendible");
     if (!worksheet) {
         throw new Error('La hoja "desprendible" no existe en la plantilla');
+    }
+
+    worksheet.pageSetup = {
+        orientation: 'landscape',
+        fitToPage: true,
+        fitToWidth: 1,
+        fitToHeight: 1
     }
 
     // Leer el último número de comprobante desde el archivo JSON
@@ -48,13 +55,13 @@ export async function generateExcel(trabajador, fechaInicio, fechaFin, devengado
             // Devengados
             if (devengadosList[index] && devengadosList[index].concepto) {
                 worksheet.getCell(`A${currentRow}`).value = devengadosList[index].concepto;
-                worksheet.getCell(`B${currentRow}`).value = devengadosList[index].valor || '';
+                worksheet.getCell(`B${currentRow}`).value = formatCurrency(devengadosList[index].valor) || '';
             }
             
             // Deducciones
             if (deduccionesList[index] && deduccionesList[index].concepto) {
                 worksheet.getCell(`C${currentRow}`).value = deduccionesList[index].concepto;
-                worksheet.getCell(`D${currentRow}`).value = deduccionesList[index].valor || '';
+                worksheet.getCell(`D${currentRow}`).value = formatCurrency(deduccionesList[index].valor) || '';
             }
         }
         

@@ -1,5 +1,4 @@
-"use server";
-
+"use server"
 export async function startRequest(token) {
     try {
         const response = await fetch('https://api.ilovepdf.com/v1/start/officepdf', {
@@ -16,9 +15,13 @@ export async function startRequest(token) {
         }
 
         const data = await response.json();
+
+        //  Limpiar el task de comillas extra si las tuviera
+        const cleanTask = String(data.task).trim().replace(/^"|"$/g, '');
+
         return {
-            task: data.task,
-            server: data.server // Asegurar que se devuelve el server
+            task: cleanTask,
+            server: data.server 
         };
 
     } catch (e) {
