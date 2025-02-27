@@ -19,24 +19,37 @@ db.prepare(`
   )
 `).run();
 
-// Verificar si las columnas existen antes de intentar agregarlas
-const columns = db.prepare("PRAGMA table_info(trabajadores)").all();
-const columnNames = columns.map(column => column.name);
+// Crear la tabla de instructores (si no existe)
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS instructores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    documento TEXT NOT NULL,
+    telefono TEXT NOT NULL,
+    numero_cuenta TEXT,
+    tipo_cuenta TEXT CHECK(tipo_cuenta IN ('ahorros', 'corriente')),
+    banco TEXT
+  )
+`).run();
 
-if (!columnNames.includes('numero_cuenta')) {
+// Verificar si las columnas existen antes de intentar agregarlas
+const columnsTrabajadores = db.prepare("PRAGMA table_info(trabajadores)").all();
+const columnNamesTrabajadores = columnsTrabajadores.map(column => column.name);
+
+if (!columnNamesTrabajadores.includes('numero_cuenta')) {
   db.prepare(`ALTER TABLE trabajadores ADD COLUMN numero_cuenta TEXT`).run();
 }
-if (!columnNames.includes('tipo_cuenta')) {
+if (!columnNamesTrabajadores.includes('tipo_cuenta')) {
   db.prepare(`ALTER TABLE trabajadores ADD COLUMN tipo_cuenta TEXT CHECK(tipo_cuenta IN ('ahorros', 'corriente'))`).run();
 }
-if (!columnNames.includes('banco')) {
+if (!columnNamesTrabajadores.includes('banco')) {
   db.prepare(`ALTER TABLE trabajadores ADD COLUMN banco TEXT`).run();
 }
-
-if (!columnNames.includes('salario')) {
-  db.prepare(`ALTER TABLE trabajadores ADD COLUMN salario REAL `).run();
+if (!columnNamesTrabajadores.includes('salario')) {
+  db.prepare(`ALTER TABLE trabajadores ADD COLUMN salario REAL NOT NULL`).run();
 }
-  
+
 // Crear tabla de deducciones con `trabajadores_id` como clave foránea
 db.prepare(`
   CREATE TABLE IF NOT EXISTS deducciones (

@@ -1,4 +1,4 @@
-import { generateExcel } from '@/utils/generateExcel';
+import { generateExcel } from '@/app/actions/generateExcel';
 
 export async function POST(req) {
     try {

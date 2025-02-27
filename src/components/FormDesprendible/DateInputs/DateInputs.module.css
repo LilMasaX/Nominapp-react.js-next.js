@@ -1,0 +1,20 @@
+
+
+.dateContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.input {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 10px;
+    border: 1px solid #3a3a3a;
+    border-radius: 5px;
+    background-color: #1e1e1e;
+    color: white;
+    font-size: 1rem;
+}

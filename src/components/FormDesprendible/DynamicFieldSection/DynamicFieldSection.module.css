@@ -1,0 +1,52 @@
+.inputGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.inputField {
+    width: 100%;
+    display: block;
+    padding: 1rem;
+    margin-top: 5px;
+    border: 1px solid #3a3a3a;
+    border-radius: 5px;
+    background-color: #1e1e1e;
+    font-size: 1rem;
+}
+
+.inputField:focus {
+    outline: none;
+    border: 1px solid #f44336;
+}
+
+.btnAdd {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.btnAdd:hover {
+    background-color: #45a049;
+}
+
+.btnRemove {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.btnRemove:hover {
+    background-color: #d32f2f;
+}
