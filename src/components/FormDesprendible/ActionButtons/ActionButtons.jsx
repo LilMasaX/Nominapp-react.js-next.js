@@ -1,20 +1,54 @@
-import styles from './ActionButtons.module.css';
-import { generateExcel } from '@/app/actions/generateExcel';
+'use client';
 import { sendEmail } from '@/app/actions/sendEmail';
+import { generateExcel } from '@/app/actions/generateExcel';
+import styles from './ActionButtons.module.css';
 
-const ActionButtons = ({ tipoPersona, onGenerate, trabajador, fechaInicio, fechaFin, devengados, deducciones, valorAPagar, dbDevengados, dbDeducciones }) => {
+export default function ActionButtons({
+    tipoPersona,
+    onGenerate,
+    trabajador,
+    fechaInicio,
+    fechaFin,
+    devengados,
+    deducciones,
+    valorAPagar,
+    dbDevengados,
+    dbDeducciones,
+}) {
     const handleSend = async () => {
         try {
-            // Validar que haya un trabajador seleccionado
             if (!trabajador || !trabajador.email) {
-                throw new Error('No se ha seleccionado un trabajador o falta el email');
+                throw new Error('No se ha seleccionado un trabajador o no tiene email');
             }
 
-            // Generar el PDF
-            const pdfBuffer = await generateExcel(trabajador, fechaInicio, fechaFin, devengados, deducciones, valorAPagar, dbDevengados, dbDeducciones);
+            // Generar el PDF en base64
+            const pdfBase64 = await generateExcel(
+                trabajador,
+                fechaInicio,
+                fechaFin,
+                devengados,
+                deducciones,
+                valorAPagar,
+                dbDevengados,
+                dbDeducciones
+            );
 
-            // Enviar el PDF por correo
-            await sendEmail(trabajador.email, 'Desprendible de Pago', 'Adjunto encontrarás tu desprendible de pago.', pdfBuffer);
+            // Verificar que la cadena base64 no sea undefined
+            if (!pdfBase64) {
+                throw new Error('La cadena base64 del PDF es undefined');
+            }
+
+            // Enviar el PDF por correo electrónico
+            const result = await sendEmail(
+                trabajador.email,
+                'Desprendible de Pago',
+                'Adjunto encontrarás tu desprendible de pago.',
+                pdfBase64
+            );
+
+            if (!result.success) {
+                throw new Error(result.error || 'Error al enviar el correo');
+            }
 
             alert('Desprendible enviado con éxito');
         } catch (error) {
@@ -25,25 +59,12 @@ const ActionButtons = ({ tipoPersona, onGenerate, trabajador, fechaInicio, fecha
 
     return (
         <div className={styles.buttonContainer}>
-            {/* Botón para generar el PDF */}
-            <button
-                type="button"
-                className={styles.btnAdd}
-                onClick={onGenerate}
-            >
-                {tipoPersona === 'trabajadores' ? 'Generar Desprendible' : 'Generar desprendible OC'}
+            <button className={styles.btnAdd} onClick={onGenerate} disabled={!tipoPersona}>
+                Generar Documento
             </button>
-
-            {/* Botón para enviar el PDF */}
-            <button
-                type="button"
-                className={styles.btnAdd}
-                onClick={handleSend}
-            >
-                {tipoPersona === 'trabajadores' ? 'Enviar Desprendible' : 'Enviar desprendible OC'}
+            <button className={styles.btnAdd} onClick={handleSend} disabled={!tipoPersona || !trabajador}>
+                Enviar por Correo
             </button>
         </div>
     );
-};
-
-export default ActionButtons;
+}

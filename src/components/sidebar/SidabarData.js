@@ -1,34 +1,42 @@
-import { ChevronDown, ChevronUp, MailMinus, Users,BriefcaseBusiness, PenTool, FileClock} from 'lucide-react'
+import {
+    ChevronDown,
+    ChevronUp,
+    MailMinus,
+    Users,
+    BriefcaseBusiness,
+    PenTool,
+    FileClock
+} from 'lucide-react';
 
 const SidebarData = [
     {
         title: 'Desprendibles',
         path: '/desprendibles',
-        icon: <MailMinus />,
+        Icon: MailMinus, // Guardamos el componente, no JSX
     },
     {
         title: 'Colaboradores',
         path: '/colaboradores',
-        icon: <Users />,        
-        iconClosed: <ChevronDown />,
-        iconOpened: <ChevronUp />,
-        subNav:[
-            { 
+        Icon: Users,
+        IconClosed: ChevronDown,
+        IconOpened: ChevronUp,
+        subNav: [
+            {
                 title: 'Empleados',
                 path: '/colaboradores/empleados',
-                icon:<BriefcaseBusiness />
+                Icon: BriefcaseBusiness
             },
-            { 
+            {
                 title: 'Instructores',
                 path: '/colaboradores/instructores',
-                icon:<PenTool />
+                Icon: PenTool
             }
         ]
     },
     {
         title: 'Historial',
         path: '/historial',
-        icon: <FileClock />
+        Icon: FileClock
     },
 ];
 

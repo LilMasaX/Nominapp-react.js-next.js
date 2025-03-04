@@ -61,7 +61,7 @@ export async function generateExcel(
         worksheet.getCell("D6").value = `${new Date().getFullYear()} - ${newComprobanteNumber}`;
         worksheet.getCell("D7").value = `${trabajador.nombre}`;
         worksheet.getCell("D8").value = `${trabajador.documento}`;
-        worksheet.getCell("D9").value = trabajador.cargo ? `${trabajador.cargo}` : "No aplica";
+        worksheet.getCell("D9").value = trabajador.cargo ? `${trabajador.cargo}` : "Instructor";
         worksheet.getCell("D10").value = trabajador.salario ? formatCurrency(trabajador.salario) : "No aplica";
 
         // Función para llenar devengados y deducciones
@@ -127,7 +127,10 @@ export async function generateExcel(
             const pdfBuffer = await task.download();
             console.log("PDF descargado");
 
-            return pdfBuffer; // Retorna el buffer del PDF
+            const pdfBase64 = pdfBuffer.toString("base64");
+
+            return pdfBase64;
+             // Retorna el pdf en cadena 64
         } catch (error) {
             console.error("Error en la conversión a PDF:", error);
             throw error;

@@ -1,77 +1,38 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Link from "next/link";
-
-const SidebarLink = styled(Link)`
-  display: flex;
-  color: #e1e9fc;
-  justify-content: space-between;
-  align-items: center;
-  padding: 25px;
-  list-style: none;
-  height: 60px;
-  text-decoration: none;
-  font-size: 21px;
-
-  &:hover {
-    background: #252831;
-    border-left: 4px solid #f44336;
-    cursor: pointer;
-  }
-`;
-
-const SidebarLabel = styled.span`
-  margin-left: 16px;
-  font-size: 18px;
-`;
-
-const DropdownLink = styled(Link)`
-  background: #414757;
-  height: 60px;
-  padding-left: 3rem;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #f5f5f5;
-  font-size: 18px;
-
-  &:hover {
-    background: #f44336;
-    cursor: pointer;
-  }
-`;
+'use client';
+import { useState } from 'react';
+import Link from 'next/link';
+import styles from './sidebar.module.css';
 
 const SubMenu = ({ item }) => {
-  const [subNav, setSubNav] = useState(false);
-
-  const showSubnav = () => setSubNav(!subNav);
+  const [subnav, setSubnav] = useState(false);
 
   return (
     <>
-      <div onClick={item.subNav && showSubnav}>
-        <SidebarLink href={item.subNav ? "#" : item.path}>
-          <div>
-            {item.icon}
-            <SidebarLabel>{item.title}</SidebarLabel>
+      <div className={styles.sidebarLink} onClick={() => item.subNav && setSubnav(!subnav)}>
+        <Link href={item.subNav ? '#' : item.path} className={styles.sidebarLink}>
+          <div className={styles.sidebarLinkContent}>
+            {item.Icon && <item.Icon className={styles.icon} />}
+            <span className={styles.sidebarLabel}>{item.title}</span>
           </div>
           <div>
-            {item.subNav && subNav
-              ? item.iconOpened
-              : item.subNav
-              ? item.iconClosed
-              : null}
+            {item.subNav && (
+              subnav 
+                ? <item.IconOpened className={styles.icon} />
+                : <item.IconClosed className={styles.icon} />
+            )}
           </div>
-        </SidebarLink>
+        </Link>
       </div>
-      {subNav &&
-        item.subNav.map((subItem, index) => {
-          return (
-            <DropdownLink href={subItem.path} key={index}>
-              {subItem.icon}
-              <SidebarLabel>{subItem.title}</SidebarLabel>
-            </DropdownLink>
-          );
-        })}
+      {subnav && item.subNav?.map((subItem) => (
+        <Link
+          key={subItem.title}
+          href={subItem.path}
+          className={styles.dropdownLink}
+        >
+          {subItem.Icon && <subItem.Icon className={styles.icon} />}
+          <span className={styles.sidebarLabel}>{subItem.title}</span>
+        </Link>
+      ))}
     </>
   );
 };

@@ -1,27 +1,41 @@
+"use server"
 import { Resend } from 'resend';
 
-// Inicializa Resend con tu clave API
-const resend = new Resend(process.env.RESEND_API_KEY);
+const API_KEY = 're_MkTcXUtH_AgFETLhsv3p69kS4rkL93KF9';
 
-export async function sendEmailWithResend(to, subject, text, pdfBuffer) {
+export async function sendEmail(to, subject, text, pdfBase64) {
     try {
-        const response = await resend.emails.send({
-            from: 'tu-email@tu-dominio.com', // Cambia esto por tu email verificado
-            to: to,
-            subject: subject,
-            text: text,
+        // Convertir la cadena base64 a Buffer
+        const pdfBuffer = Buffer.from(pdfBase64, 'base64');
+
+        // Validación del buffer
+        if (!Buffer.isBuffer(pdfBuffer)) {
+            throw new Error('El PDF no es un buffer válido');
+        }
+
+        // Enviar con Resend
+        const resend = new Resend(API_KEY);
+        await resend.emails.send({
+            from: 'desprendibles@centicsas.com.co',
+            to,
+            subject,
+            text,
             attachments: [
                 {
                     filename: 'desprendible.pdf',
-                    content: pdfBuffer.toString('base64'), // Convierte el PDF a base64
-                    contentType: 'application/pdf',
+                    content: pdfBuffer,
+                    encoding: 'binary',
                 },
             ],
         });
-        console.log('Correo enviado con éxito:', response);
-        return { success: true, message: 'Correo enviado con éxito' };
+
+        return { success: true };
     } catch (error) {
-        console.error('Error enviando el correo:', error);
-        throw new Error('No se pudo enviar el correo: ' + error.message);
+        console.error('Error detallado:', {
+            message: error.message,
+            stack: error.stack,
+            raw: error.originalError || error,
+        });
+        return { success: false, error: error.message };
     }
 }

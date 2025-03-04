@@ -51,9 +51,17 @@ export default function FormDesprendiblesPage() {
 
             const valorAPagar = calculatePayment(processedDevengados, processedDeducciones, dbDevengados, dbDeducciones);
 
-            const pdfBuffer = await generateExcel(persona, fechaInicio, fechaFin, processedDevengados, processedDeducciones, valorAPagar, dbDevengados, dbDeducciones);
+            const pdfBase64 = await generateExcel(persona, fechaInicio, fechaFin, processedDevengados, processedDeducciones, valorAPagar, dbDevengados, dbDeducciones);
 
-            const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+            // Convertir base64 a Blob para descarga
+            const byteCharacters = atob(pdfBase64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
