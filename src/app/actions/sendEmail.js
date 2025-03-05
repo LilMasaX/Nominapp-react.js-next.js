@@ -1,25 +1,23 @@
 "use server"
 import { Resend } from 'resend';
 
-const API_KEY = 're_MkTcXUtH_AgFETLhsv3p69kS4rkL93KF9';
-
-export async function sendEmail(to, subject, text, pdfBase64) {
+export async function sendEmail(to, subject, htmlContent, pdfBase64) {
     try {
         // Convertir la cadena base64 a Buffer
         const pdfBuffer = Buffer.from(pdfBase64, 'base64');
-
+        console.log(process.env.RESEND_API_KEY);
         // Validación del buffer
         if (!Buffer.isBuffer(pdfBuffer)) {
             throw new Error('El PDF no es un buffer válido');
         }
 
         // Enviar con Resend
-        const resend = new Resend(API_KEY);
+        const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
             from: 'desprendibles@centicsas.com.co',
-            to,
-            subject,
-            text,
+            to: to,
+            subject: subject,
+            html: htmlContent,
             attachments: [
                 {
                     filename: 'desprendible.pdf',

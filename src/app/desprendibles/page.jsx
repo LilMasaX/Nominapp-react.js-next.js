@@ -11,10 +11,12 @@ import { useDatabaseData } from '@/hooks/useDatabaseData';
 import Card from '@/components/card/Card';
 import { calculatePayment } from '@/utils/calculatePayment';
 import { generateExcel } from '@/app/actions/generateExcel';
+import TextArea from '@/components/FormDesprendible/AnotInput/TextArea';
 
 export default function FormDesprendiblesPage() {
     const [fechaInicio, setFechaInicio] = useState('');
     const [fechaFin, setFechaFin] = useState('');
+    const [anotaciones,SetAnotaciones] = useState('');
 
     // Hooks personalizados
     const {
@@ -81,6 +83,10 @@ export default function FormDesprendiblesPage() {
         newFields[index][key] = value;
         fieldType === 'devengados' ? setDevengados(newFields) : setDeducciones(newFields);
     };
+    
+    const handleAnotacionesChange = (e) => {
+        SetAnotaciones(e.target.value);
+    }
 
     return (
         <div>
@@ -104,10 +110,13 @@ export default function FormDesprendiblesPage() {
                     sectionTitle="Deducciones"
                     fieldLabels={['Concepto', 'Valor']}
                 />
+                <TextArea value={anotaciones} onChange={handleAnotacionesChange} placeholder={'Ingrese aqui las anotaciones necesarias (asegurese de que la ortografia sea correcta)'}/>
+                
                 <ActionButtons
                     tipoPersona={tipoPersona}
                     onGenerate={handleGenerateDocument}
                     trabajador={personas.find(p => p.id == selectedPersona)}
+                    anotaciones ={anotaciones}
                     fechaInicio={fechaInicio}
                     fechaFin={fechaFin}
                     devengados={devengados}

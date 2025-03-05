@@ -108,8 +108,8 @@ export async function generateExcel(
 
         // Inicializar ILovePDF con tus claves
         const instance = new ILovePDFApi(
-            "project_public_01fab4e7e4d2c22eaf6bbafabd23eb45_p6LeG531c486ad23cc8496e7483eab71caf0d", 
-            "secret_key_ecf031f60be58ccb016efb48cc1cb3ae_I73iX37a4a16dc5611986527c4d738e22dbab" 
+            process.env.ILOVEPDF_PUBLIC_KEY,
+            process.env.ILOVEPDF_SECRET_KEY 
         );
         const task = instance.newTask("officepdf");
 

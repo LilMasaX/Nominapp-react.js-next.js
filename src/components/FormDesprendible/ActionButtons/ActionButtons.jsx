@@ -4,6 +4,7 @@ import { generateExcel } from '@/app/actions/generateExcel';
 import styles from './ActionButtons.module.css';
 
 export default function ActionButtons({
+    anotaciones,
     tipoPersona,
     onGenerate,
     trabajador,
@@ -33,6 +34,39 @@ export default function ActionButtons({
                 dbDeducciones
             );
 
+            const cuerpoHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; }
+                        .header { color: #2c3e50; font-size: 18px; }
+                        .detalles { margin: 15px 0; padding: 10px; background: #f8f9fa; }
+                        .firma { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+                    </style>
+                </head>
+                <body>
+                    <p class="header">Buen día ${trabajador.nombre},</p>
+                    
+                    <p>Adjunto encontrará su desprendible de pago correspondiente al periodo:</p>
+                    
+                    <div class="detalles">
+                        <p><strong>Fecha fin:</strong> ${fechaFin}</p>
+                    </div>
+
+                    <p><strong>Importante:</strong></p>
+                    <ul>
+                        <li>Conserve este documento para sus registros</li>
+                        <li>Reporte inconsistencias a lideradmin@centicsas.com.co</li>
+                    </ul>
+                    ${anotaciones && `
+                    <h2>Anotaciones && <h2/>
+                    <p>${anotaciones}</p>
+                    `}
+                </body>
+                </html>
+                `;
+
             // Verificar que la cadena base64 no sea undefined
             if (!pdfBase64) {
                 throw new Error('La cadena base64 del PDF es undefined');
@@ -41,8 +75,8 @@ export default function ActionButtons({
             // Enviar el PDF por correo electrónico
             const result = await sendEmail(
                 trabajador.email,
-                'Desprendible de Pago',
-                'Adjunto encontrarás tu desprendible de pago.',
+                `Desprendible de Pago - ${trabajador.nombre} - ${fechaFin} - CENTIC SAS`, 
+                cuerpoHTML,
                 pdfBase64
             );
 
