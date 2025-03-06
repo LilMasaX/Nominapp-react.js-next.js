@@ -72,4 +72,16 @@ db.prepare(`
   )
 `).run();
 
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS historial (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    trabajadores_id INTEGER,
+    fecha_generacion TEXT,
+    fecha_envio TEXT,
+    estado TEXT,
+    FOREIGN KEY (trabajadores_id) REFERENCES trabajadores(id)
+  )
+`).run();
+
+
 module.exports = db;

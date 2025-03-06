@@ -1,0 +1,81 @@
+.table {
+    width: 95%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem auto;
+    background: #2d2d2d;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.table th,
+.table td {
+    padding: 1.2rem;
+    text-align: center !important;
+    vertical-align: middle; 
+    border-bottom: 1px solid #3d3d3d;
+    color: #fff;
+}
+
+.table th {
+    background-color: #f44336;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.table th:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.table tr:nth-child(even) {
+    background-color: #373737;
+}
+
+.table tr:hover {
+    background-color: #424242;
+    transition: background-color 0.2s ease;
+}
+
+.table th.trabajador,
+.table td.trabajador {
+    width: 40%; /* Ajusta este valor según sea necesario */
+}
+
+.table th.fecha,
+.table td.fecha {
+    width: 30%; /* Ajusta este valor según sea necesario */
+}
+
+.table th.estado,
+.table td.estado {
+    width: 30%; /* Ajusta este valor según sea necesario */
+}
+
+@media (max-width: 768px) {
+    .table {
+        width: 95%;
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .table td {
+        min-width: 120px; /* Añadido */
+    }
+}

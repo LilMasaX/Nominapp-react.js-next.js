@@ -1,7 +1,8 @@
-"use server"
+"use server";
 import { Resend } from 'resend';
+import db from '@/db/db';
 
-export async function sendEmail(to, subject, htmlContent, pdfBase64) {
+export async function sendEmail(to, subject, htmlContent, pdfBase64, historialId) {
     try {
         // Convertir la cadena base64 a Buffer
         const pdfBuffer = Buffer.from(pdfBase64, 'base64');
@@ -27,8 +28,21 @@ export async function sendEmail(to, subject, htmlContent, pdfBase64) {
             ],
         });
 
+        const stmt = db.prepare(`
+            UPDATE historial
+            SET fecha_envio = datetime('now'), estado = 'enviado'
+            WHERE id = ?
+        `);
+        stmt.run(historialId);
+
         return { success: true };
     } catch (error) {
+        const stmt = db.prepare(`
+            UPDATE historial
+            SET estado = 'fallido'
+            WHERE id = ?
+        `);
+        stmt.run(historialId);
         console.error('Error detallado:', {
             message: error.message,
             stack: error.stack,

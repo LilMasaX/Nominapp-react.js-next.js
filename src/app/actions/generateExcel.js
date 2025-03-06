@@ -5,6 +5,7 @@ import ExcelJS from "exceljs";
 import ILovePDFApi from "@ilovepdf/ilovepdf-nodejs";
 import ILovePDFFile from "@ilovepdf/ilovepdf-nodejs/ILovePDFFile";
 import tmp from "tmp";
+import db from "@/db/db";
 
 export async function generateExcel(
     trabajador,
@@ -129,7 +130,16 @@ export async function generateExcel(
 
             const pdfBase64 = pdfBuffer.toString("base64");
 
-            return pdfBase64;
+            const stmt = db.prepare(`
+                INSERT INTO historial (trabajadores_id, fecha_generacion, estado)
+                VALUES(?, datetime('now'), 'generado')
+                `
+            )
+
+            const info = stmt.run(trabajador.id);
+            const historialId = info.lastInsertRowid;
+
+            return {pdfBase64, historialId};
              // Retorna el pdf en cadena 64
         } catch (error) {
             console.error("Error en la conversión a PDF:", error);

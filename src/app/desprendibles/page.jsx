@@ -16,7 +16,7 @@ import TextArea from '@/components/FormDesprendible/AnotInput/TextArea';
 export default function FormDesprendiblesPage() {
     const [fechaInicio, setFechaInicio] = useState('');
     const [fechaFin, setFechaFin] = useState('');
-    const [anotaciones,SetAnotaciones] = useState('');
+    const [anotaciones, SetAnotaciones] = useState('');
 
     // Hooks personalizados
     const {
@@ -53,7 +53,7 @@ export default function FormDesprendiblesPage() {
 
             const valorAPagar = calculatePayment(processedDevengados, processedDeducciones, dbDevengados, dbDeducciones);
 
-            const pdfBase64 = await generateExcel(persona, fechaInicio, fechaFin, processedDevengados, processedDeducciones, valorAPagar, dbDevengados, dbDeducciones);
+            const { pdfBase64 } = await generateExcel(persona, fechaInicio, fechaFin, processedDevengados, processedDeducciones, valorAPagar, dbDevengados, dbDeducciones);
 
             // Convertir base64 a Blob para descarga
             const byteCharacters = atob(pdfBase64);
@@ -83,7 +83,7 @@ export default function FormDesprendiblesPage() {
         newFields[index][key] = value;
         fieldType === 'devengados' ? setDevengados(newFields) : setDeducciones(newFields);
     };
-    
+
     const handleAnotacionesChange = (e) => {
         SetAnotaciones(e.target.value);
     }

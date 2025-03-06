@@ -1,7 +1,7 @@
 'use client';
-import { sendEmail } from '@/app/actions/sendEmail';
-import { generateExcel } from '@/app/actions/generateExcel';
 import styles from './ActionButtons.module.css';
+import { generateExcel } from '@/app/actions/generateExcel';
+import { sendEmail } from '@/app/actions/sendEmail';
 
 export default function ActionButtons({
     anotaciones,
@@ -23,7 +23,7 @@ export default function ActionButtons({
             }
 
             // Generar el PDF en base64
-            const pdfBase64 = await generateExcel(
+            const { pdfBase64, historialId } = await generateExcel(
                 trabajador,
                 fechaInicio,
                 fechaFin,
@@ -59,10 +59,8 @@ export default function ActionButtons({
                         <li>Conserve este documento para sus registros</li>
                         <li>Reporte inconsistencias a lideradmin@centicsas.com.co</li>
                     </ul>
-                    ${anotaciones && `
-                    <h2>Anotaciones && <h2/>
+                    <h2>Anotaciones <h2/>
                     <p>${anotaciones}</p>
-                    `}
                 </body>
                 </html>
                 `;
@@ -77,7 +75,8 @@ export default function ActionButtons({
                 trabajador.email,
                 `Desprendible de Pago - ${trabajador.nombre} - ${fechaFin} - CENTIC SAS`, 
                 cuerpoHTML,
-                pdfBase64
+                pdfBase64,
+                historialId // Pasar historialId aquí
             );
 
             if (!result.success) {
