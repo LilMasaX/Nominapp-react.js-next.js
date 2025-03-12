@@ -1,7 +1,7 @@
 'use client';
 import styles from './ActionButtons.module.css';
-import { generateExcel } from '@/app/actions/generateExcel';
-import { sendEmail } from '@/app/actions/sendEmail';
+import { generateExcel } from '@/utils/generateExcel';
+import { sendEmail } from '@/utils/sendEmail'
 
 export default function ActionButtons({
     anotaciones,
@@ -76,7 +76,7 @@ export default function ActionButtons({
                 `Desprendible de Pago - ${trabajador.nombre} - ${fechaFin} - CENTIC SAS`, 
                 cuerpoHTML,
                 pdfBase64,
-                historialId // Pasar historialId aquí
+                historialId
             );
 
             if (!result.success) {

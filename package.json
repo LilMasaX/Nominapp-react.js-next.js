@@ -2,23 +2,29 @@
   "name": "nominapp",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev:server": "nodemon electron/server.js --watch electron",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "electron:dev": "electron .",
+    "electron:build": "npm run build && electron-builder",
+    "postinstall": "electron-rebuild",
+    "rebuild": "electron-rebuild -f -w sqlite3"
   },
   "dependencies": {
     "@ilovepdf/ilovepdf-nodejs": "^0.3.0",
     "axios": "^1.7.9",
     "better-sqlite3": "^11.8.1",
+    "cors": "^2.8.5",
     "exceljs": "^4.4.0",
+    "express": "^4.21.2",
     "form-data": "^4.0.2",
-    "fs": "^0.0.1-security",
     "libreoffice-convert": "^1.6.0",
     "lucide-react": "^0.474.0",
-    "next": "15.1.6",
-    "node-fetch": "^3.3.2",
+    "next": "^15.2.1",
     "nodemailer": "^6.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -29,7 +35,31 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "electron": "^28.0.0",
+    "electron-builder": "^25.1.8",
+    "electron-is-dev": "^2.0.0",
+    "electron-rebuild": "^3.2.9",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6"
+    "eslint-config-next": "15.1.6",
+    "nodemon": "^3.0.2"
+  },
+  "build": {
+    "appId": "com.nominapp.app",
+    "files": [
+      "out/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

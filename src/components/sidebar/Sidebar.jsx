@@ -26,6 +26,14 @@ const Sidebar = () => {
         >
           <Menu className={styles.icon} />
         </Link>
+        
+        <div className={styles.logoContainer} >
+          <img 
+            src="/logo.webp" // Ruta corregida
+            alt="Logo de la empresa"
+            className={styles.logo} 
+          />
+        </div>
       </div>
       
       <nav className={`${styles.sidebarNav} ${

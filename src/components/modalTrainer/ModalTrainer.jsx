@@ -25,7 +25,7 @@ export default function ModalTrainer({ onAddTrainer }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // Lógica para agregar el trabajador a la base de datos
-        const response = await fetch('/api/instructores', {
+        const response = await fetch('http://localhost:3000/api/instructores', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
