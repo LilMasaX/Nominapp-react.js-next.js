@@ -7,10 +7,21 @@ export default function Empleados() {
   const [trabajadores, setTrabajadores] = useState([]);
 
   const fetchTrabajadores = () => {
-    fetch('/api/trabajadores')
-      .then(response => response.json())
-      .then(data => setTrabajadores(data))
-      .catch(error => console.error('Error fetching trabajadores:', error));
+    fetch("http://localhost:4000/api/trabajadores")
+      .then(response => {
+        if (!response.ok) throw new Error("Error en la respuesta del servidor");
+        return response.json();
+      })
+      .then(data => {
+        // Asegúrate de que data sea un array
+        if (Array.isArray(data)) {
+          setTrabajadores(data);
+        } else {
+          console.error("La respuesta no es un array:", data);
+          setTrabajadores([]);
+        }
+      })
+      .catch(error => console.error("Error:", error));
   };
 
   useEffect(() => {

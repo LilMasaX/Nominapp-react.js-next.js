@@ -10,7 +10,6 @@ import { useDynamicFields } from '@/hooks/useDynamicFields';
 import { useDatabaseData } from '@/hooks/useDatabaseData';
 import Card from '@/components/card/Card';
 import { calculatePayment } from '@/utils/calculatePayment';
-import { generateExcel } from '@/app/actions/generateExcel';
 import TextArea from '@/components/FormDesprendible/AnotInput/TextArea';
 
 export default function FormDesprendiblesPage() {
@@ -38,43 +37,91 @@ export default function FormDesprendiblesPage() {
 
     const handleGenerateDocument = async () => {
         try {
+            // Validaciones
+            if (!selectedPersona) throw new Error('Debe seleccionar una persona');
             const persona = personas.find(p => p.id == selectedPersona);
-            if (!persona) throw new Error('Debe seleccionar una persona');
-
-            const processedDevengados = devengados.map(d => ({
-                concepto: d.concepto,
-                valor: Number(d.valor) || 0,
+            if (!persona) throw new Error('Persona no encontrada');
+    
+            // Procesar datos numéricos
+            const processData = (items) => items.map(item => ({
+                concepto: item.concepto,
+                valor: Number(item.valor) || 0
             }));
-
-            const processedDeducciones = deducciones.map(d => ({
-                concepto: d.concepto,
-                valor: Number(d.valor) || 0,
-            }));
-
-            const valorAPagar = calculatePayment(processedDevengados, processedDeducciones, dbDevengados, dbDeducciones);
-
-            const { pdfBase64 } = await generateExcel(persona, fechaInicio, fechaFin, processedDevengados, processedDeducciones, valorAPagar, dbDevengados, dbDeducciones);
-
-            // Convertir base64 a Blob para descarga
-            const byteCharacters = atob(pdfBase64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
+    
+            const processedDevengados = processData(devengados);
+            const processedDeducciones = processData(deducciones);
+    
+            // Calcular valor final
+            const valorAPagar = calculatePayment(
+                processedDevengados,
+                processedDeducciones,
+                dbDevengados,
+                dbDeducciones
+            );
+    
+            // Hacer petición al servidor
+            const response = await fetch('http://localhost:3001/api/generateExcel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    trabajador: {
+                        id: persona.id,
+                        nombre: persona.nombre,
+                        documento: persona.documento,
+                        cargo: persona.cargo,
+                        salario: persona.salario
+                    },
+                    fechaInicio,
+                    fechaFin,
+                    devengados: processedDevengados,
+                    deducciones: processedDeducciones,
+                    valorAPagar,
+                    dbDevengados,
+                    dbDeducciones
+                })
+            });
+    
+            // Manejar errores HTTP
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error en la respuesta del servidor');
             }
-            const byteArray = new Uint8Array(byteNumbers);
+    
+            // Obtener respuesta
+            const { pdfBase64, historialId } = await response.json();
+    
+            // Descargar PDF
+            const byteCharacters = atob(pdfBase64);
+            const byteArray = new Uint8Array(byteCharacters.length);
+            
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteArray[i] = byteCharacters.charCodeAt(i);
+            }
+    
             const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `desprendible_${persona.nombre}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
+            const downloadUrl = URL.createObjectURL(blob);
+    
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = `desprendible_${persona.nombre.replace(/\s+/g, '_')}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+    
+            // Limpiar
+            document.body.removeChild(link);
+            URL.revokeObjectURL(downloadUrl);
+    
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error al generar el documento: ' + error.message);
+            console.error('Error en generación de documento:', error);
+            
+            // Mensaje amigable
+            const errorMessage = error.message.includes('Failed to fetch')
+                ? 'No se pudo conectar al servidor'
+                : error.message;
+    
+            alert(`Error: ${errorMessage}`);
         }
     };
 

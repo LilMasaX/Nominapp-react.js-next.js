@@ -27,7 +27,7 @@ export default function ModalWorkers({ onAddTrabajador }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // Lógica para agregar el trabajador a la base de datos
-        const response = await fetch('/api/trabajadores', {
+        const response = await fetch('http://localhost:4000/api/trabajadores', { // Cambiar a puerto 3000
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

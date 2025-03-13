@@ -16,7 +16,7 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
 
     useEffect(() => {
         if (isOpen && trabajadorId) {
-            fetch(`/api/trabajadores/${trabajadorId}`)
+            fetch(`http://localhost:3000/api/trabajadores/${trabajadorId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Error fetching trabajador');
@@ -45,7 +45,7 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await fetch(`/api/trabajadores/${trabajadorId}`, {
+        const response = await fetch(`http://localhost:3000/api/trabajadores/${trabajadorId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default function ModalEditWorker({ isOpen, onClose, trabajadorId, onUpdat
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`/api/trabajadores/${trabajadorId}`, {
+            const response = await fetch(`http://localhost:3000/api/trabajadores/${trabajadorId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {

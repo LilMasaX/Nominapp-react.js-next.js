@@ -10,7 +10,7 @@ export default function ModalDetails({ isOpen, onClose, trabajadorId, type }) {
 
     useEffect(() => {
         if (isOpen) {
-            fetch(`/api/${type}?trabajadorId=${trabajadorId}`)
+            fetch(`http://localhost:3000/api/${type}?trabajadorId=${trabajadorId}`)
                 .then(response => response.json())
                 .then(data => setDetails(data))
                 .catch(error => console.error(`Error fetching ${type}:`, error));
@@ -25,7 +25,7 @@ export default function ModalDetails({ isOpen, onClose, trabajadorId, type }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formattedValue = parseFloat(formData.valor).toFixed(2); // Formatear el valor como número con dos decimales
-        const response = await fetch(`/api/${type}`, {
+        const response = await fetch(`http://localhost:3000/api/${type}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export default function ModalDetails({ isOpen, onClose, trabajadorId, type }) {
         });
         if (response.ok) {
             setFormData({ concepto: '', valor: '' });
-            fetch(`/api/${type}?trabajadorId=${trabajadorId}`)
+            fetch(`http://localhost:3000/api/${type}?trabajadorId=${trabajadorId}`)
                 .then(response => response.json())
                 .then(data => setDetails(data))
                 .catch(error => console.error(`Error fetching ${type}:`, error));
@@ -44,7 +44,7 @@ export default function ModalDetails({ isOpen, onClose, trabajadorId, type }) {
     };
 
     const handleDelete = async (id) => {
-        const response = await fetch(`/api/${type}/${id}`, {
+        const response = await fetch(`http://localhost:3000/api/${type}/${id}`, {
             method: 'DELETE',
         });
         if (response.ok) {

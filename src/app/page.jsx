@@ -1,7 +1,6 @@
-
+// app/page.jsx
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <div></div>  
-  );
+  redirect('/desprendibles'); // Redirección en el servidor
 }

@@ -51,7 +51,7 @@ export default function TableEmpleados({ trabajadores, onUpdate }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {trabajadores.map(trabajador => (
+                    {Array.isArray(trabajadores) && trabajadores.map(trabajador => ( // Verificar que trabajadores es un array
                         <tr key={trabajador.id}>
                             <td>{trabajador.nombre}</td>
                             <td>{trabajador.email}</td>

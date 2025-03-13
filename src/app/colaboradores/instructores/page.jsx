@@ -9,7 +9,7 @@ export default function FormDesprendiblesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchTrainer = () => {
-    fetch('/api/instructores')
+    fetch('http://localhost:3000/api/instructores')
       .then(response => response.json())
       .then(data => {
         console.log('Fetched trainers:', data);
