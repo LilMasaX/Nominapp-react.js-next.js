@@ -15,7 +15,7 @@ export default function ModalEditTrainer({ isOpen, onClose, trainerId, onUpdate 
     useEffect(() => {
         if (isOpen && trainerId) {
             console.log('Fetching trainer with ID:', trainerId);
-            fetch(`http://localhost:3000/api/instructores/${trainerId}`)
+            fetch(`http://localhost:4000/api/instructores/${trainerId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Error fetching trainer');
@@ -47,7 +47,7 @@ export default function ModalEditTrainer({ isOpen, onClose, trainerId, onUpdate 
         event.preventDefault();
         console.log('Updating trainer with ID:', trainerId);
         try {
-            const response = await fetch(`http://localhost:3000/api/instructores/${trainerId}`, {
+            const response = await fetch(`http://localhost:4000/api/instructores/${trainerId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export default function ModalEditTrainer({ isOpen, onClose, trainerId, onUpdate 
     const handleDelete = async () => {
         try {
             console.log('Deleting trainer with ID:', trainerId);
-            const response = await fetch(`http://localhost:3000/api/instructores/${trainerId}`, {
+            const response = await fetch(`http://localhost:4000/api/instructores/${trainerId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {

@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 
 // Crea o abre la base de datos
-const db = new Database('electron.sqlite', {
+const db = new Database('db.db', {
   verbose: console.log // Opcional: muestra queries en consola
 });
 

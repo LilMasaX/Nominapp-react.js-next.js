@@ -9,8 +9,8 @@ export const usePersona = () => {
         const fetchPersonas = async () => {
             try {
                 const endpoint = tipoPersona === 'trabajadores'
-                    ? 'http://localhost:3000/api/trabajadores'
-                    : 'http://localhost:3000/api/instructores';
+                    ? 'http://localhost:4000/api/trabajadores'
+                    : 'http://localhost:4000/api/instructores';
 
                 const response = await fetch(endpoint);
                 const data = await response.json();

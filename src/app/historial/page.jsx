@@ -10,7 +10,7 @@ export default function HistorialDesprendibles() {
     useEffect(() => {
         const fetchHistorial = async () => {
             try {
-                const res = await fetch('/api/historial');
+                const res = await fetch('http://localhost:4000/api/historial'); 
                 const data = await res.json();
                 // Asegúrate de que data sea un array
                 if (Array.isArray(data)) {

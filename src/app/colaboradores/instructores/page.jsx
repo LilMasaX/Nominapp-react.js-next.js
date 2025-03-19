@@ -9,7 +9,7 @@ export default function FormDesprendiblesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchTrainer = () => {
-    fetch('http://localhost:3000/api/instructores')
+    fetch('http://localhost:4000/api/instructores')
       .then(response => response.json())
       .then(data => {
         console.log('Fetched trainers:', data);
@@ -34,6 +34,10 @@ export default function FormDesprendiblesPage() {
     setSelectedTrainerId(null);
   };
 
+  const handleAddTrainer = () => {
+    fetchTrainer();
+  };
+
   return (
     <>
       <h1>Instructores</h1>
@@ -41,9 +45,9 @@ export default function FormDesprendiblesPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         trainerId={selectedTrainerId}
-        onUpdate={fetchTrainer}
+        onAddTrainer={handleAddTrainer} 
       />
-      <TableTrainer trainers={trainer} onEdit={handleEditTrainer} />
+      <TableTrainer trainers={trainer} onEdit={handleEditTrainer} onUpdate={handleAddTrainer} /> {/* Pasar la función onUpdate */}
     </>
   );
 }

@@ -13,11 +13,31 @@ router.get("/", (req, res) => {
   }
 });
 
+// Obtener un trabajador por ID
+router.get("/:id", (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    const trabajador = db.prepare("SELECT * FROM trabajadores WHERE id = ?").get(id);
+    if (!trabajador) {
+      return res.status(404).json({ error: 'Trabajador no encontrado' });
+    }
+
+    res.json(trabajador);
+  } catch (error) {
+    console.error('Error en GET /trabajadores/:id:', error);
+    res.status(500).json({ error: "Error al obtener el trabajador" });
+  }
+});
+
 // Agregar nuevo trabajador
 router.post('/', (req, res) => {
   try {
     const { nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario } = req.body;
-    
+
     // Validación de campos
     const camposRequeridos = [nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario];
     if (camposRequeridos.some(campo => !campo)) {
@@ -28,24 +48,23 @@ router.post('/', (req, res) => {
     const insert = db.prepare(`
       INSERT INTO trabajadores 
       (nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario)
-      VALUES (@nombre, @email, @documento, @telefono, @cargo, @numero_cuenta, @tipo_cuenta, @banco, @salario)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
-    const result = insert.run(req.body);
-    
+    const result = insert.run(nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario);
+
     res.status(201).json({ 
       id: result.lastInsertRowid,
       message: 'Trabajador creado exitosamente'
     });
-
   } catch (error) {
     console.error('Error en POST /trabajadores:', error);
-    
+
     // Manejo de errores de constraint UNIQUE
     if (error.message.includes('UNIQUE constraint failed')) {
       return res.status(409).json({ error: 'Documento o email ya existen' });
     }
-    
+
     res.status(500).json({ error: 'Error al crear trabajador' });
   }
 });
@@ -54,10 +73,12 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (!id || isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
 
     const { nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario } = req.body;
-    
+
     // Validación de campos
     const camposRequeridos = [nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario];
     if (camposRequeridos.some(campo => !campo)) {
@@ -66,19 +87,19 @@ router.put('/:id', (req, res) => {
 
     const update = db.prepare(`
       UPDATE trabajadores SET 
-        nombre = @nombre,
-        email = @email,
-        documento = @documento,
-        telefono = @telefono,
-        cargo = @cargo,
-        numero_cuenta = @numero_cuenta,
-        tipo_cuenta = @tipo_cuenta,
-        banco = @banco,
-        salario = @salario
-      WHERE id = @id
+        nombre = ?,
+        email = ?,
+        documento = ?,
+        telefono = ?,
+        cargo = ?,
+        numero_cuenta = ?,
+        tipo_cuenta = ?,
+        banco = ?,
+        salario = ?
+      WHERE id = ?
     `);
 
-    const result = update.run({ ...req.body, id });
+    const result = update.run(nombre, email, documento, telefono, cargo, numero_cuenta, tipo_cuenta, banco, salario, id);
 
     if (result.changes === 0) {
       return res.status(404).json({ error: 'Trabajador no encontrado' });
@@ -88,9 +109,11 @@ router.put('/:id', (req, res) => {
       message: 'Trabajador actualizado exitosamente',
       changes: result.changes
     });
-
   } catch (error) {
     console.error('Error en PUT /trabajadores:', error);
+    if (error.message.includes('UNIQUE constraint failed')) {
+      return res.status(409).json({ error: 'Documento o email ya existen' });
+    }
     res.status(500).json({ error: 'Error al actualizar trabajador' });
   }
 });
@@ -99,7 +122,9 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (!id || isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
 
     const result = db.prepare('DELETE FROM trabajadores WHERE id = ?').run(id);
 
@@ -111,7 +136,6 @@ router.delete('/:id', (req, res) => {
       message: 'Trabajador eliminado exitosamente',
       changes: result.changes
     });
-
   } catch (error) {
     console.error('Error en DELETE /trabajadores:', error);
     res.status(500).json({ error: 'Error al eliminar trabajador' });

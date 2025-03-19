@@ -14,8 +14,8 @@ export const useDatabaseData = (trabajadorId) => {
 
             try {
                 const [devRes, dedRes] = await Promise.all([
-                    fetch(`http://localhost:3000/api/devengados?trabajadorId=${trabajadorId}`),
-                    fetch(`http://localhost:3000/api/deducciones?trabajadorId=${trabajadorId}`)
+                    fetch(`http://localhost:4000/api/devengados?trabajadorId=${trabajadorId}`),
+                    fetch(`http://localhost:4000/api/deducciones?trabajadorId=${trabajadorId}`)
                 ]);
 
                 const devengados = await devRes.json();

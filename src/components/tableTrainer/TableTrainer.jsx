@@ -22,7 +22,7 @@ export default function TableTrainer({ onUpdate }) {
     useEffect(() => {
         const fetchTrainers = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/instructores');
+                const response = await fetch('http://localhost:4000/api/instructores');
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
