@@ -1,6 +1,3 @@
-// app/page.jsx
-import { redirect } from 'next/navigation';
-
 export default function Home() {
-  redirect('/desprendibles'); // Redirección en el servidor
+  return null; // No renderizar nada, ya que la redirección se maneja en next.config.mjs
 }

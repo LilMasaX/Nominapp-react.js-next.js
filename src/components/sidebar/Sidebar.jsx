@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image'; // Importar el componente Image
 import { Menu, PanelLeftClose } from 'lucide-react';
 import styles from '@/components/sidebar/sidebar.module.css';
 import SidebarData from './SidabarData';
@@ -27,11 +28,13 @@ const Sidebar = () => {
           <Menu className={styles.icon} />
         </Link>
         
-        <div className={styles.logoContainer} >
-          <img 
-            src="/logo.webp" // Ruta corregida
+        <div className={styles.logoContainer}>
+          <Image
+            src="/logo.webp" // Ruta absoluta
             alt="Logo de la empresa"
-            className={styles.logo} 
+            width={100} // Ajusta según el tamaño real del logo
+            height={100} // Ajusta según el tamaño real del logo
+            className={styles.logo}
           />
         </div>
       </div>

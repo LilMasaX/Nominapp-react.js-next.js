@@ -1,3 +1,8 @@
+.tableContainer {
+    overflow-x: auto; 
+    margin: 0 auto;
+    width: 100%;
+  }
 .table {
     width: 85%;
     border-collapse: separate;
@@ -88,7 +93,7 @@
     }
 
     .table td {
-        min-width: 120px; /* Añadido */
+        min-width: 120px; 
     }
 }
 

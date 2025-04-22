@@ -1,4 +1,5 @@
 import { Plus, Minus } from 'lucide-react';
+import { NumericFormat } from 'react-number-format'; // Importar NumericFormat
 import styles from './DynamicFieldSection.module.css';
 
 const DynamicFieldSection = ({
@@ -20,12 +21,19 @@ const DynamicFieldSection = ({
                     value={item.concepto}
                     onChange={(e) => onChange(index, 'concepto', e.target.value)}
                 />
-                <input
-                    type="number"
+                <NumericFormat
+                    value={item.valor}
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    prefix="$"
+                    decimalScale={2}
+                    allowNegative={false} // Evitar valores negativos
                     className={styles.inputField}
                     placeholder={fieldLabels[1]}
-                    value={item.valor}
-                    onChange={(e) => onChange(index, 'valor', e.target.value)}
+                    onValueChange={(values) => {
+                        const { value } = values; // `value` es el valor sin formato
+                        onChange(index, 'valor', value); // Actualizar el valor limpio en el estado
+                    }}
                 />
                 <button
                     type="button"

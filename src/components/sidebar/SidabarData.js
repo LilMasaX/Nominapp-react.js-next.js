@@ -5,7 +5,8 @@ import {
     Users,
     BriefcaseBusiness,
     PenTool,
-    FileClock
+    FileClock,
+    Handshake
 } from 'lucide-react';
 
 const SidebarData = [
@@ -30,7 +31,13 @@ const SidebarData = [
                 title: 'Instructores',
                 path: '/colaboradores/instructores',
                 Icon: PenTool
-            }
+            },
+            {
+                title: 'Proveedores',
+                path: '/colaboradores/proveedores',
+                Icon: Handshake
+            },
+            
         ]
     },
     {

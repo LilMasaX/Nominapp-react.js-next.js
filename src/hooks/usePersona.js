@@ -1,33 +1,40 @@
 import { useState, useEffect } from 'react';
 
 export const usePersona = () => {
-    const [tipoPersona, setTipoPersona] = useState('trabajadores');
-    const [personas, setPersonas] = useState([]);
-    const [selectedPersona, setSelectedPersona] = useState('');
+  const [tipoPersona, setTipoPersona] = useState('trabajadores');
+  const [personas, setPersonas] = useState([]);
+  const [selectedPersona, setSelectedPersona] = useState('');
 
-    useEffect(() => {
-        const fetchPersonas = async () => {
-            try {
-                const endpoint = tipoPersona === 'trabajadores'
-                    ? 'http://localhost:3000/api/trabajadores'
-                    : 'http://localhost:3000/api/instructores';
+  useEffect(() => {
+    const fetchPersonas = async () => {
+      try {
+        const endpoint =
+          tipoPersona === 'trabajadores'
+            ? 'http://localhost:4000/api/trabajadores'
+            : tipoPersona === 'instructores'
+            ? 'http://localhost:4000/api/instructores'
+            : 'http://localhost:4000/api/proveedores';
 
-                const response = await fetch(endpoint);
-                const data = await response.json();
-                setPersonas(data);
-            } catch (error) {
-                console.error(`Error fetching ${tipoPersona}:`, error);
-            }
-        };
+        const response = await fetch(endpoint);
+        const data = await response.json();
 
-        fetchPersonas();
-    }, [tipoPersona]);
+        // Verifica los datos en la consola para depuración
+        console.log(`Datos obtenidos para ${tipoPersona}:`, data);
 
-    return {
-        tipoPersona,
-        personas,
-        selectedPersona,
-        setTipoPersona,
-        setSelectedPersona
+        setPersonas(data);
+      } catch (error) {
+        console.error(`Error al obtener ${tipoPersona}:`, error);
+      }
     };
+
+    fetchPersonas();
+  }, [tipoPersona]);
+
+  return {
+    tipoPersona,
+    personas,
+    selectedPersona,
+    setTipoPersona,
+    setSelectedPersona,
+  };
 };

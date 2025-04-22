@@ -10,6 +10,8 @@ const PersonaTypeSelector = ({ tipoPersona, setTipoPersona }) => (
         >
             <option value="trabajadores">Trabajadores</option>
             <option value="instructores">Instructores</option>
+            <option value="proveedores">Proveedores</option>
+
         </select>
     </div>
 );

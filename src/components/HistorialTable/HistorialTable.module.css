@@ -79,3 +79,30 @@
         min-width: 120px; /* Añadido */
     }
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    gap: 0.5rem;
+  }
+  
+  .pageButton {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pageButton:hover {
+    background-color: #ddd;
+  }
+  
+  .pageButton.active {
+    background-color: #f44336;
+    color: #fff;
+    border-color: #f44336;
+  }

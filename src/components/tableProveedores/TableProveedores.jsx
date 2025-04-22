@@ -1,22 +1,21 @@
 "use client";
 import { UserPen } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
-import styles from './TableTrainer.module.css';
+import React, { useState } from 'react';
+import styles from './TableProveedores.module.css';
 import ModalEdit from '../modalEdit/ModalEdit';
 
-export default function TableTrainer({ onUpdate }) {
-  const [trainers, setTrainers] = useState([]);
-  const [selectedTrainer, setSelectedTrainer] = useState(null);
+export default function TableProveedores({ proveedores, onUpdate }) {
+  const [selectedProveedor, setSelectedProveedor] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   // Estado para la paginación
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 8; // Número de filas por página
 
-  const trainerFields = [
-    { name: "nombre", label: "Nombre", type: "text", required: true },
+  const proveedorFields = [
+    { name: "nombre", label: "Razon Social", type: "text", required: true },
     { name: "email", label: "Email", type: "email", required: true },
-    { name: "documento", label: "Documento", type: "number", required: true },
+    { name: "nit", label: "NIT", type: "number", required: true },
     { name: "telefono", label: "Telefono", type: "text", required: true },
     { name: "numero_cuenta", label: "Numero de Cuenta", type: "text", required: true },
     { 
@@ -32,53 +31,34 @@ export default function TableTrainer({ onUpdate }) {
     { name: "banco", label: "Banco", type: "text", required: true },
   ];
 
-  const openEditModal = (trainerId) => {
-    setSelectedTrainer(trainerId);
+  const openEditModal = (proveedorId) => {
+    setSelectedProveedor(proveedorId);
     setEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setSelectedTrainer(null);
+    setSelectedProveedor(null);
     setEditModalOpen(false);
   };
 
   // Calcular los datos para la página actual
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentTrainers = trainers.slice(indexOfFirstRow, indexOfLastRow);
+  const currentProveedores = proveedores.slice(indexOfFirstRow, indexOfLastRow);
 
   // Cambiar de página
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    const fetchTrainers = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/api/instructores');
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
-        }
-        const data = await response.json();
-        console.log('Fetched trainers:', data);
-        setTrainers(data);
-      } catch (error) {
-        console.error('Error fetching trainers:', error);
-      }
-    };
-
-    fetchTrainers();
-  }, [onUpdate]);
-
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Nombre</th>
+            <th>Razon Social</th>
             <th>Email</th>
-            <th>Documento</th>
+            <th>NIT</th>
             <th>Banco</th>
             <th>Tipo de cuenta</th>
             <th>Numero de Cuenta</th>
@@ -86,18 +66,18 @@ export default function TableTrainer({ onUpdate }) {
           </tr>
         </thead>
         <tbody>
-          {currentTrainers.map((trainer) => (
-            <tr key={trainer.id}>
-              <td>{trainer.nombre}</td>
-              <td>{trainer.email}</td>
-              <td>{trainer.documento}</td>
-              <td>{trainer.banco}</td>
-              <td>{trainer.tipo_cuenta}</td>
-              <td>{trainer.numero_cuenta}</td>
+          {currentProveedores.map((proveedor) => (
+            <tr key={proveedor.id}>
+              <td>{proveedor.nombre}</td>
+              <td>{proveedor.email}</td>
+              <td>{proveedor.nit}</td>
+              <td>{proveedor.banco}</td>
+              <td>{proveedor.tipo_cuenta}</td>
+              <td>{proveedor.numero_cuenta}</td>
               <td>
                 <button
                   className={styles.actionButton}
-                  onClick={() => openEditModal(trainer.id)}
+                  onClick={() => openEditModal(proveedor.id)}
                 >
                   <UserPen />
                 </button>
@@ -109,7 +89,7 @@ export default function TableTrainer({ onUpdate }) {
 
       {/* Paginación */}
       <div className={styles.pagination}>
-        {Array.from({ length: Math.ceil(trainers.length / rowsPerPage) }, (_, index) => (
+        {Array.from({ length: Math.ceil(proveedores.length / rowsPerPage) }, (_, index) => (
           <button
             key={index + 1}
             className={`${styles.pageButton} ${currentPage === index + 1 ? styles.active : ''}`}
@@ -124,12 +104,12 @@ export default function TableTrainer({ onUpdate }) {
         <ModalEdit
           isOpen={editModalOpen}
           onClose={closeEditModal}
-          itemId={selectedTrainer}
+          itemId={selectedProveedor}
           onUpdate={onUpdate}
-          fields={trainerFields}
-          endpoint={`http://localhost:4000/api/instructores`}
-          title={"Instructor"}
-          buttonText={"Actualizar Instructor"}
+          fields={proveedorFields}
+          endpoint={`http://localhost:4000/api/proveedores`}
+          title={"Proveedor"}
+          buttonText={"Actualizar proveedor"}
         />
       )}
     </div>

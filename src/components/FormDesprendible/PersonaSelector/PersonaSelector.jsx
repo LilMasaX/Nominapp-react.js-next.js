@@ -3,7 +3,13 @@ import styles from './PersonaSelector.module.css';
 const PersonaSelector = ({ tipoPersona, personas, selectedPersona, setSelectedPersona }) => (
     <div className={styles.formGroup}>
         <label className={styles.label}>
-           <h3> {tipoPersona === 'trabajadores' ? 'Seleccionar trabajador' : 'Seleccionar instructor'}</h3>
+            <h3>
+                {tipoPersona === 'trabajadores'
+                    ? 'Seleccionar trabajador'
+                    : tipoPersona === 'instructores'
+                    ? 'Seleccionar instructor'
+                    : 'Seleccionar proveedor'}
+            </h3>
         </label>
         <select
             className={styles.select}
@@ -12,9 +18,15 @@ const PersonaSelector = ({ tipoPersona, personas, selectedPersona, setSelectedPe
             required
         >
             <option value="">Seleccione...</option>
-            {personas.map(p => (
-                <option key={p.id} value={p.id}>{p.nombre}</option>
-            ))}
+            {personas.length > 0 ? (
+                personas.map((p) => (
+                    <option key={p.id} value={p.id}>
+                        {p.nombre}
+                    </option>
+                ))
+            ) : (
+                <option disabled>No hay personas disponibles</option>
+            )}
         </select>
     </div>
 );
